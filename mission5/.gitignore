@@ -1,0 +1,50 @@
+# Build artifacts
+bin/
+obj/
+out/
+artifacts/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userprefs
+
+# Rider
+.idea/
+
+# NuGet
+*.nupkg
+packages/
+.nuget/
+
+# ReSharper
+_ReSharper*/
+*.DotSettings.user
+
+# OS generated files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Avalonia specific
+*.xaml.g.cs
+*.xaml.cache
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+
+# Test results
+TestResults/
+*.trx
+
+# Dotnet cache
+project.lock.json
+project.fragment.lock.json
+
+# Environment variables file
+.env

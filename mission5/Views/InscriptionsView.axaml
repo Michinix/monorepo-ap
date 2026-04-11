@@ -1,0 +1,255 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:mission5.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="950" d:DesignHeight="700"
+             x:Class="mission5.Views.InscriptionsView"
+             x:DataType="vm:InscriptionsViewModel">
+
+    <Design.DataContext>
+        <vm:InscriptionsViewModel/>
+    </Design.DataContext>
+
+    <ScrollViewer>
+        <StackPanel Spacing="20">
+
+            <!-- En-tête avec bouton retour -->
+            <Grid ColumnDefinitions="Auto,*">
+                <Button Grid.Column="0"
+                        Command="{Binding BackCommand}"
+                        Background="Transparent"
+                        Foreground="#4a5568"
+                        Padding="8"
+                        BorderThickness="0"
+                        Cursor="Hand"
+                        VerticalAlignment="Center"
+                        Margin="0,0,12,0">
+                    <TextBlock Text="← Retour" FontSize="14" FontWeight="SemiBold"/>
+                </Button>
+
+                <StackPanel Grid.Column="1" Spacing="4">
+                    <TextBlock Text="Inscriptions à l'atelier"
+                               FontSize="28"
+                               FontWeight="Bold"
+                               Foreground="#2d3748"/>
+                    <TextBlock Text="{Binding Atelier.Nom}"
+                               FontSize="16"
+                               Foreground="#4299e1"
+                               FontWeight="SemiBold"
+                               IsVisible="{Binding Atelier, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+                </StackPanel>
+            </Grid>
+
+            <!-- Informations de l'atelier -->
+            <Border Background="White"
+                    CornerRadius="10"
+                    Padding="20"
+                    BoxShadow="0 1 3 0 #1a000000"
+                    IsVisible="{Binding Atelier, Converter={x:Static ObjectConverters.IsNotNull}}">
+                <Grid ColumnDefinitions="*,*,*,*">
+
+                    <StackPanel Grid.Column="0" Spacing="4">
+                        <TextBlock Text="📅 Date"
+                                   FontSize="12"
+                                   Foreground="#718096"/>
+                        <TextBlock Text="{Binding Atelier.Date, StringFormat='{}{0:dd/MM/yyyy}'}"
+                                   FontSize="16"
+                                   FontWeight="SemiBold"
+                                   Foreground="#2d3748"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1" Spacing="4">
+                        <TextBlock Text="🕐 Horaire"
+                                   FontSize="12"
+                                   Foreground="#718096"/>
+                        <TextBlock Text="{Binding Atelier.Horaire}"
+                                   FontSize="16"
+                                   FontWeight="SemiBold"
+                                   Foreground="#2d3748"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="2" Spacing="4">
+                        <TextBlock Text="📍 Lieu"
+                                   FontSize="12"
+                                   Foreground="#718096"/>
+                        <TextBlock Text="{Binding Atelier.Lieu}"
+                                   FontSize="16"
+                                   FontWeight="SemiBold"
+                                   Foreground="#2d3748"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="3" Spacing="4">
+                        <TextBlock Text="👥 Places"
+                                   FontSize="12"
+                                   Foreground="#718096"/>
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <TextBlock Text="{Binding NombreInscrits}"
+                                       FontSize="16"
+                                       FontWeight="Bold"
+                                       Foreground="#48bb78"/>
+                            <TextBlock Text="/"
+                                       FontSize="16"
+                                       Foreground="#718096"/>
+                            <TextBlock Text="{Binding Atelier.NombrePlaces}"
+                                       FontSize="16"
+                                       Foreground="#718096"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                </Grid>
+            </Border>
+
+            <!-- Barre d'actions -->
+            <Border Background="White"
+                    CornerRadius="10"
+                    Padding="16"
+                    BoxShadow="0 1 3 0 #1a000000">
+                <Grid ColumnDefinitions="*,Auto,Auto">
+
+                    <TextBlock Grid.Column="0"
+                               FontSize="16"
+                               FontWeight="SemiBold"
+                               Foreground="#2d3748"
+                               VerticalAlignment="Center">
+                        <Run Text="{Binding NombreInscrits}"/>
+                        <Run Text="inscription(s)"/>
+                    </TextBlock>
+
+                    <Button Grid.Column="1"
+                            Command="{Binding ExportCommand}"
+                            Background="#edf2f7"
+                            Foreground="#4a5568"
+                            Padding="12,8"
+                            CornerRadius="8"
+                            BorderThickness="0"
+                            Cursor="Hand"
+                            Margin="0,0,8,0">
+                        <TextBlock Text="📥 Exporter CSV" FontSize="13" FontWeight="SemiBold"/>
+                    </Button>
+
+                    <Button Grid.Column="2"
+                            Command="{Binding PrintCommand}"
+                            Background="#4299e1"
+                            Foreground="White"
+                            Padding="12,8"
+                            CornerRadius="8"
+                            BorderThickness="0"
+                            Cursor="Hand">
+                        <TextBlock Text="🖨️ Imprimer" FontSize="13" FontWeight="SemiBold"/>
+                    </Button>
+                </Grid>
+            </Border>
+
+            <!-- Message de chargement -->
+            <Border Background="White"
+                    CornerRadius="10"
+                    Padding="40"
+                    IsVisible="{Binding IsLoading}"
+                    BoxShadow="0 1 3 0 #1a000000">
+                <StackPanel Spacing="12" HorizontalAlignment="Center">
+                    <TextBlock Text="⏳" FontSize="32" HorizontalAlignment="Center"/>
+                    <TextBlock Text="Chargement des inscriptions..."
+                               FontSize="14"
+                               Foreground="#718096"
+                               HorizontalAlignment="Center"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Liste des inscrits -->
+            <Border Background="White"
+                    CornerRadius="10"
+                    Padding="0"
+                    BoxShadow="0 1 3 0 #1a000000"
+                    IsVisible="{Binding !IsLoading}">
+                <StackPanel>
+                    <!-- En-tête -->
+                    <Grid ColumnDefinitions="50,*,150"
+                          Background="#f7fafc">
+                        <TextBlock Grid.Column="0"
+                                   Text="#"
+                                   FontSize="12"
+                                   FontWeight="Bold"
+                                   Foreground="#718096"
+                                   Margin="20,16"/>
+                        <TextBlock Grid.Column="1"
+                                   Text="Enfant"
+                                   FontSize="12"
+                                   FontWeight="Bold"
+                                   Foreground="#718096"
+                                   Margin="20,16"/>
+                        <TextBlock Grid.Column="2"
+                                   Text="Présence"
+                                   FontSize="12"
+                                   FontWeight="Bold"
+                                   Foreground="#718096"
+                                   HorizontalAlignment="Center"
+                                   Margin="20,16"/>
+                    </Grid>
+
+                    <!-- Lignes -->
+                    <ItemsControl ItemsSource="{Binding Inscriptions}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border BorderBrush="#e2e8f0"
+                                        BorderThickness="0,1,0,0"
+                                        Padding="20,16">
+                                    <Grid ColumnDefinitions="50,*,150">
+
+                                        <TextBlock Grid.Column="0"
+                                                   Text="{Binding Id}"
+                                                   FontSize="14"
+                                                   Foreground="#718096"
+                                                   VerticalAlignment="Center"/>
+
+                                        <StackPanel Grid.Column="1" Spacing="2">
+                                            <TextBlock Text="{Binding NomComplet}"
+                                                       FontSize="15"
+                                                       FontWeight="SemiBold"
+                                                       Foreground="#2d3748"/>
+                                        </StackPanel>
+
+                                        <Border Grid.Column="2"
+                                                Background="#d1fae5"
+                                                CornerRadius="6"
+                                                Padding="12,6"
+                                                HorizontalAlignment="Center">
+                                            <TextBlock Text="✓ Présent"
+                                                       FontSize="12"
+                                                       FontWeight="SemiBold"
+                                                       Foreground="#065f46"
+                                                       HorizontalAlignment="Center"/>
+                                        </Border>
+
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+
+            <!-- Message si aucune inscription -->
+            <Border Background="White"
+                    CornerRadius="10"
+                    Padding="40"
+                    IsVisible="{Binding Inscriptions.Count, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=0}"
+                    BoxShadow="0 1 3 0 #1a000000">
+                <StackPanel Spacing="12" HorizontalAlignment="Center">
+                    <TextBlock Text="📋" FontSize="48" HorizontalAlignment="Center" Opacity="0.5"/>
+                    <TextBlock Text="Aucune inscription pour le moment"
+                               FontSize="16"
+                               FontWeight="SemiBold"
+                               Foreground="#4a5568"
+                               HorizontalAlignment="Center"/>
+                    <TextBlock Text="Les inscriptions apparaîtront ici une fois effectuées"
+                               FontSize="13"
+                               Foreground="#718096"
+                               HorizontalAlignment="Center"/>
+                </StackPanel>
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
+
+</UserControl>

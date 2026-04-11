@@ -1,0 +1,256 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:mission5.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="950" d:DesignHeight="700"
+             x:Class="mission5.Views.AtelierFormView"
+             x:DataType="vm:AtelierFormViewModel">
+
+    <Design.DataContext>
+        <vm:AtelierFormViewModel/>
+    </Design.DataContext>
+
+    <ScrollViewer>
+        <StackPanel Spacing="20" MaxWidth="700">
+
+            <!-- En-tête -->
+            <StackPanel Spacing="4">
+                <TextBlock Text="{Binding Title}"
+                           FontSize="28"
+                           FontWeight="Bold"
+                           Foreground="#2d3748"/>
+                <TextBlock Text="Remplissez les informations de l'atelier"
+                           FontSize="14"
+                           Foreground="#718096"/>
+            </StackPanel>
+
+            <!-- Messages -->
+            <Border Background="#fff5f5"
+                    BorderBrush="#fc8181"
+                    BorderThickness="1"
+                    CornerRadius="8"
+                    Padding="12,8"
+                    IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                <TextBlock Text="{Binding ErrorMessage}"
+                           Foreground="#c53030"
+                           FontSize="13"
+                           TextWrapping="Wrap"/>
+            </Border>
+
+            <Border Background="#f0fdf4"
+                    BorderBrush="#86efac"
+                    BorderThickness="1"
+                    CornerRadius="8"
+                    Padding="12,8"
+                    IsVisible="{Binding SuccessMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                <TextBlock Text="{Binding SuccessMessage}"
+                           Foreground="#15803d"
+                           FontSize="13"
+                           TextWrapping="Wrap"/>
+            </Border>
+
+            <!-- Formulaire -->
+            <Border Background="White"
+                    CornerRadius="10"
+                    Padding="24"
+                    BoxShadow="0 1 3 0 #1a000000">
+                <StackPanel Spacing="20">
+
+                    <!-- Nom -->
+                    <StackPanel Spacing="6">
+                        <TextBlock Text="Nom de l'atelier *"
+                                   FontSize="13"
+                                   FontWeight="SemiBold"
+                                   Foreground="#4a5568"/>
+                        <TextBox Text="{Binding Nom}"
+                                 Watermark="Ex: Atelier musique"
+                                 Padding="12,10"
+                                 FontSize="14"
+                                 CornerRadius="8"
+                                 BorderBrush="#cbd5e0"
+                                 BorderThickness="1.5"/>
+                    </StackPanel>
+
+                    <!-- Description -->
+                    <StackPanel Spacing="6">
+                        <TextBlock Text="Description"
+                                   FontSize="13"
+                                   FontWeight="SemiBold"
+                                   Foreground="#4a5568"/>
+                        <TextBox Text="{Binding Description}"
+                                 Watermark="Décrivez l'atelier..."
+                                 AcceptsReturn="True"
+                                 TextWrapping="Wrap"
+                                 Height="80"
+                                 Padding="12,10"
+                                 FontSize="14"
+                                 CornerRadius="8"
+                                 BorderBrush="#cbd5e0"
+                                 BorderThickness="1.5"/>
+                    </StackPanel>
+
+                    <!-- Date -->
+                    <StackPanel Spacing="6">
+                        <TextBlock Text="Date de l'atelier *"
+                                   FontSize="13"
+                                   FontWeight="SemiBold"
+                                   Foreground="#4a5568"/>
+                        <CalendarDatePicker SelectedDate="{Binding Date}"
+                                            HorizontalAlignment="Stretch"/>
+                    </StackPanel>
+
+                    <!-- Horaires -->
+                    <Grid ColumnDefinitions="*,16,*">
+                        <StackPanel Grid.Column="0" Spacing="6">
+                            <TextBlock Text="Heure de début *"
+                                       FontSize="13"
+                                       FontWeight="SemiBold"
+                                       Foreground="#4a5568"/>
+                            <TimePicker SelectedTime="{Binding HeureDebut}"
+                                        HorizontalAlignment="Stretch"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="2" Spacing="6">
+                            <TextBlock Text="Heure de fin *"
+                                       FontSize="13"
+                                       FontWeight="SemiBold"
+                                       Foreground="#4a5568"/>
+                            <TimePicker SelectedTime="{Binding HeureFin}"
+                                        HorizontalAlignment="Stretch"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- Lieu -->
+                    <StackPanel Spacing="6">
+                        <TextBlock Text="Lieu *"
+                                   FontSize="13"
+                                   FontWeight="SemiBold"
+                                   Foreground="#4a5568"/>
+                        <TextBox Text="{Binding Lieu}"
+                                 Watermark="Ex: Salle d'activité principale"
+                                 Padding="12,10"
+                                 FontSize="14"
+                                 CornerRadius="8"
+                                 BorderBrush="#cbd5e0"
+                                 BorderThickness="1.5"/>
+                    </StackPanel>
+
+                    <!-- Nombre de places et type public -->
+                    <Grid ColumnDefinitions="*,16,*">
+                        <StackPanel Grid.Column="0" Spacing="6">
+                            <TextBlock Text="Nombre de places *"
+                                       FontSize="13"
+                                       FontWeight="SemiBold"
+                                       Foreground="#4a5568"/>
+                            <NumericUpDown Value="{Binding NombrePlaces}"
+                                           Minimum="1"
+                                           Maximum="100"
+                                           Increment="1"
+                                           Padding="12,10"
+                                           FontSize="14"
+                                           CornerRadius="8"
+                                           BorderBrush="#cbd5e0"
+                                           BorderThickness="1.5"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="2" Spacing="6">
+                            <TextBlock Text="Type de public *"
+                                       FontSize="13"
+                                       FontWeight="SemiBold"
+                                       Foreground="#4a5568"/>
+                            <ComboBox ItemsSource="{Binding TypesPublic}"
+                                      SelectedValue="{Binding TypePublic}"
+                                      DisplayMemberBinding="{Binding Display}"
+                                      SelectedValueBinding="{Binding Value}"
+                                      Padding="12,10"
+                                      FontSize="14"
+                                      CornerRadius="8"
+                                      BorderBrush="#cbd5e0"
+                                      BorderThickness="1.5"
+                                      HorizontalAlignment="Stretch"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- Date limite inscription -->
+                    <StackPanel Spacing="6">
+                        <TextBlock Text="Date limite d'inscription *"
+                                   FontSize="13"
+                                   FontWeight="SemiBold"
+                                   Foreground="#4a5568"/>
+                        <CalendarDatePicker SelectedDate="{Binding DateLimiteInscription}"
+                                            HorizontalAlignment="Stretch"/>
+                    </StackPanel>
+
+                    <!-- Âge min et max (optionnel) -->
+                    <Grid ColumnDefinitions="*,16,*">
+                        <StackPanel Grid.Column="0" Spacing="6">
+                            <TextBlock Text="Âge minimum (mois)"
+                                       FontSize="13"
+                                       FontWeight="SemiBold"
+                                       Foreground="#4a5568"/>
+                            <NumericUpDown Value="{Binding AgeMinMois}"
+                                           Minimum="0"
+                                           Maximum="72"
+                                           Increment="1"
+                                           Padding="12,10"
+                                           FontSize="14"
+                                           CornerRadius="8"
+                                           BorderBrush="#cbd5e0"
+                                           BorderThickness="1.5"
+                                           Watermark="Optionnel"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="2" Spacing="6">
+                            <TextBlock Text="Âge maximum (mois)"
+                                       FontSize="13"
+                                       FontWeight="SemiBold"
+                                       Foreground="#4a5568"/>
+                            <NumericUpDown Value="{Binding AgeMaxMois}"
+                                           Minimum="0"
+                                           Maximum="72"
+                                           Increment="1"
+                                           Padding="12,10"
+                                           FontSize="14"
+                                           CornerRadius="8"
+                                           BorderBrush="#cbd5e0"
+                                           BorderThickness="1.5"
+                                           Watermark="Optionnel"/>
+                        </StackPanel>
+                    </Grid>
+
+                </StackPanel>
+            </Border>
+
+            <!-- Boutons d'action -->
+            <Grid ColumnDefinitions="*,12,*">
+                <Button Grid.Column="0"
+                        Command="{Binding CancelCommand}"
+                        Background="#f7fafc"
+                        Foreground="#4a5568"
+                        Padding="0,12"
+                        CornerRadius="8"
+                        BorderBrush="#e2e8f0"
+                        BorderThickness="1.5"
+                        HorizontalAlignment="Stretch"
+                        Cursor="Hand">
+                    <TextBlock Text="Annuler" FontSize="14" FontWeight="SemiBold"/>
+                </Button>
+
+                <Button Grid.Column="2"
+                        Command="{Binding SaveCommand}"
+                        Background="#4299e1"
+                        Foreground="White"
+                        Padding="0,12"
+                        CornerRadius="8"
+                        BorderThickness="0"
+                        HorizontalAlignment="Stretch"
+                        Cursor="Hand">
+                    <TextBlock Text="Enregistrer" FontSize="14" FontWeight="SemiBold"/>
+                </Button>
+            </Grid>
+
+        </StackPanel>
+    </ScrollViewer>
+
+</UserControl>

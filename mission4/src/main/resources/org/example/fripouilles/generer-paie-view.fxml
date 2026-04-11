@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.example.fripouilles.controller.GenererPaieController"
+      spacing="20"
+      style="-fx-background-color: white;">
+
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <!-- En-tête -->
+    <HBox alignment="CENTER_LEFT" style="-fx-background-color: #2196F3; -fx-padding: 15; -fx-background-radius: 5;">
+        <Label text="Générer une fiche de paie" style="-fx-text-fill: white;">
+            <font>
+                <Font name="System Bold" size="18"/>
+            </font>
+        </Label>
+    </HBox>
+
+    <!-- Description -->
+    <Label text="Sélectionnez un contrat et la période pour générer automatiquement la fiche de paie."
+           wrapText="true"
+           style="-fx-text-fill: #757575; -fx-font-style: italic;"/>
+
+    <!-- Formulaire -->
+    <VBox spacing="15">
+        <!-- Contrat -->
+        <VBox spacing="5">
+            <Label text="Contrat de garde *">
+                <font>
+                    <Font name="System Bold" size="12"/>
+                </font>
+            </Label>
+            <ComboBox fx:id="contratComboBox" promptText="Sélectionnez un contrat" prefWidth="500"/>
+            <Label text="Seuls les contrats actifs sont affichés"
+                   style="-fx-text-fill: #757575; -fx-font-size: 10;"/>
+        </VBox>
+
+        <!-- Période -->
+        <HBox spacing="15">
+            <VBox spacing="5" HBox.hgrow="ALWAYS">
+                <Label text="Mois *">
+                    <font>
+                        <Font name="System Bold" size="12"/>
+                    </font>
+                </Label>
+                <ComboBox fx:id="moisComboBox" prefWidth="200"/>
+            </VBox>
+
+            <VBox spacing="5" HBox.hgrow="ALWAYS">
+                <Label text="Année *">
+                    <font>
+                        <Font name="System Bold" size="12"/>
+                    </font>
+                </Label>
+                <ComboBox fx:id="anneeComboBox" prefWidth="200"/>
+            </VBox>
+        </HBox>
+
+        <!-- Commentaire -->
+        <VBox spacing="5">
+            <Label text="Commentaire (optionnel)">
+                <font>
+                    <Font name="System Bold" size="12"/>
+                </font>
+            </Label>
+            <TextArea fx:id="commentaireTextArea" promptText="Ajoutez un commentaire..." 
+                      wrapText="true" prefRowCount="3"/>
+        </VBox>
+    </VBox>
+
+    <!-- Information -->
+    <HBox spacing="10" style="-fx-background-color: #E3F2FD; -fx-padding: 10; -fx-background-radius: 5;">
+        <Label text="ℹ️" style="-fx-font-size: 16;"/>
+        <Label text="La fiche de paie sera calculée automatiquement à partir des suivis de garde validés du mois sélectionné. Assurez-vous que tous les suivis du mois sont validés avant de générer la paie."
+               wrapText="true"
+               style="-fx-text-fill: #1976D2;"/>
+    </HBox>
+
+    <!-- Boutons -->
+    <HBox spacing="15" alignment="CENTER">
+        <padding>
+            <Insets top="10"/>
+        </padding>
+        <Button fx:id="genererButton" text="Générer la paie" onAction="#handleGenerer"
+                style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;"
+                prefWidth="150"
+                defaultButton="true"/>
+        <Button fx:id="annulerButton" text="Annuler" onAction="#handleAnnuler"
+                style="-fx-background-color: #f44336; -fx-text-fill: white;"
+                prefWidth="120"
+                cancelButton="true"/>
+    </HBox>
+
+    <!-- Note légale -->
+    <Label text="* Champs obligatoires"
+           style="-fx-text-fill: #f44336; -fx-font-size: 10;"/>
+</VBox>

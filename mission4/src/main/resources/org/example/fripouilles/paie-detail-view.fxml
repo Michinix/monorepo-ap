@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<VBox fx:id="root" xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.example.fripouilles.controller.PaieDetailController"
+      spacing="20"
+      style="-fx-background-color: white; -fx-background-radius: 10;">
+
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <!-- En-tête -->
+    <HBox alignment="CENTER_LEFT" style="-fx-background-color: #2196F3; -fx-padding: 15; -fx-background-radius: 5;">
+        <Label text="Détails de la fiche de paie" style="-fx-text-fill: white;">
+            <font>
+                <Font name="System Bold" size="18"/>
+            </font>
+        </Label>
+    </HBox>
+
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS">
+        <VBox spacing="20">
+            <padding>
+                <Insets top="5" right="5" bottom="5" left="5"/>
+            </padding>
+
+            <VBox spacing="10">
+                <Label text="Informations générales" style="-fx-font-weight: bold; -fx-font-size: 14;"/>
+                <Separator/>
+                <GridPane hgap="15" vgap="10">
+                    <Label text="ID:" GridPane.columnIndex="0" GridPane.rowIndex="0" style="-fx-font-weight: bold;"/>
+                    <Label fx:id="idLabel" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                    <Label text="Contrat:" GridPane.columnIndex="0" GridPane.rowIndex="1" style="-fx-font-weight: bold;"/>
+                    <Label fx:id="contratLabel" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                    <Label text="Enfant:" GridPane.columnIndex="0" GridPane.rowIndex="2" style="-fx-font-weight: bold;"/>
+                    <Label fx:id="enfantLabel" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                    <Label text="Assistante:" GridPane.columnIndex="0" GridPane.rowIndex="3" style="-fx-font-weight: bold;"/>
+                    <Label fx:id="assistantLabel" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                    <Label text="Parent:" GridPane.columnIndex="0" GridPane.rowIndex="4" style="-fx-font-weight: bold;"/>
+                    <Label fx:id="parentLabel" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+                    <Label text="Période:" GridPane.columnIndex="0" GridPane.rowIndex="5" style="-fx-font-weight: bold;"/>
+                    <Label fx:id="periodeLabel" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+                </GridPane>
+            </VBox>
+
+            <VBox spacing="10">
+                <Label text="Heures de garde" style="-fx-font-weight: bold; -fx-font-size: 14;"/>
+                <Separator/>
+                <GridPane hgap="15" vgap="10">
+                    <Label text="Heures normales:" GridPane.columnIndex="0" GridPane.rowIndex="0" style="-fx-font-weight: bold;"/>
+                    <Label fx:id="heuresNormalesLabel" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                    <Label text="Heures majorées:" GridPane.columnIndex="0" GridPane.rowIndex="1" style="-fx-font-weight: bold;"/>
+                    <Label fx:id="heuresMajoreesLabel" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                    <Label text="Total heures:" GridPane.columnIndex="0" GridPane.rowIndex="2" style="-fx-font-weight: bold;"/>
+                    <Label fx:id="totalHeuresLabel" GridPane.columnIndex="1" GridPane.rowIndex="2" style="-fx-font-weight: bold;"/>
+                </GridPane>
+            </VBox>
+
+            <VBox spacing="10">
+                <Label text="Détails financiers" style="-fx-font-weight: bold; -fx-font-size: 14;"/>
+                <Separator/>
+                <GridPane hgap="15" vgap="10">
+                    <Label text="Salaire brut:" GridPane.columnIndex="0" GridPane.rowIndex="0" style="-fx-font-weight: bold;"/>
+                    <Label fx:id="salaireBrutLabel" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                    <Label text="Charges patronales:" GridPane.columnIndex="0" GridPane.rowIndex="1" style="-fx-font-weight: bold;"/>
+                    <Label fx:id="chargesPatronalesLabel" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                    <Label text="Charges salariales:" GridPane.columnIndex="0" GridPane.rowIndex="2" style="-fx-font-weight: bold;"/>
+                    <Label fx:id="chargesSalarialesLabel" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                    <Label text="Salaire net:" GridPane.columnIndex="0" GridPane.rowIndex="3" style="-fx-font-weight: bold; -fx-font-size: 16;"/>
+                    <Label fx:id="salaireNetLabel" GridPane.columnIndex="1" GridPane.rowIndex="3" style="-fx-font-weight: bold; -fx-font-size: 16; -fx-text-fill: #4CAF50;"/>
+                    <Label text="Prise en charge CAF:" GridPane.columnIndex="0" GridPane.rowIndex="4" style="-fx-font-weight: bold;"/>
+                    <Label fx:id="priseEnChargeCAFLabel" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+                </GridPane>
+            </VBox>
+
+            <VBox spacing="10">
+                <Label text="Commentaire" style="-fx-font-weight: bold; -fx-font-size: 14;"/>
+                <Separator/>
+                <TextArea fx:id="commentaireTextArea" editable="false" wrapText="true" prefRowCount="3"/>
+            </VBox>
+
+            <VBox spacing="10">
+                <Label text="Informations système" style="-fx-font-weight: bold; -fx-font-size: 14;"/>
+                <Separator/>
+                <GridPane hgap="15" vgap="10">
+                    <Label text="Date de création:" GridPane.columnIndex="0" GridPane.rowIndex="0" style="-fx-font-weight: bold;"/>
+                    <Label fx:id="dateCreationLabel" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                </GridPane>
+            </VBox>
+        </VBox>
+    </ScrollPane>
+
+    <!-- Boutons -->
+    <HBox spacing="10" alignment="CENTER">
+        <padding>
+            <Insets top="10"/>
+        </padding>
+        <Button text="Fermer" onAction="#handleClose"
+                style="-fx-background-color: #2196F3; -fx-text-fill: white;"
+                prefWidth="120"/>
+    </HBox>
+</VBox>

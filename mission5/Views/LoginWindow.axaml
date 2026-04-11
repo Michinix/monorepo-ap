@@ -1,0 +1,130 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:mission5.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        x:Class="mission5.Views.LoginWindow"
+        x:DataType="vm:LoginWindowViewModel"
+        SizeToContent="WidthAndHeight"
+        SystemDecorations="None"
+        WindowStartupLocation="CenterScreen"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="Connexion"
+        TransparencyLevelHint="Transparent"
+        Background="Transparent"
+        ExtendClientAreaToDecorationsHint="True"
+        ExtendClientAreaTitleBarHeightHint="-1"
+        ExtendClientAreaChromeHints="NoChrome">
+
+    <Design.DataContext>
+        <vm:LoginWindowViewModel/>
+    </Design.DataContext>
+
+    <Panel Background="Transparent">
+        <Border Background="White"
+                CornerRadius="12"
+                Padding="36"
+                Width="380"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                BoxShadow="0 10 30 6 #33000000">
+
+            <StackPanel Spacing="18">
+
+                <!-- Logo + titre -->
+                <StackPanel HorizontalAlignment="Center" Spacing="6">
+                    <Border Background="#edf2f7"
+                            CornerRadius="50"
+                            Width="60"
+                            Height="60"
+                            HorizontalAlignment="Center">
+                        <TextBlock Text="🔒"
+                                   FontSize="28"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"/>
+                    </Border>
+                    <TextBlock Text="Bienvenue"
+                               FontSize="22"
+                               FontWeight="Bold"
+                               HorizontalAlignment="Center"
+                               Foreground="#2d3748"/>
+                    <TextBlock Text="Connectez-vous pour continuer"
+                               FontSize="13"
+                               HorizontalAlignment="Center"
+                               Foreground="#718096"/>
+                </StackPanel>
+
+                <!-- Email -->
+                <StackPanel Spacing="6">
+                    <TextBlock Text="Email"
+                               FontSize="13"
+                               FontWeight="SemiBold"
+                               Foreground="#4a5568"/>
+                    <TextBox Watermark="exemple@email.com"
+                             Text="{Binding Email}"
+                             Padding="12,10"
+                             FontSize="14"
+                             CornerRadius="8"
+                             BorderBrush="#cbd5e0"
+                             BorderThickness="1.5"/>
+                </StackPanel>
+
+                <!-- Mot de passe -->
+                <StackPanel Spacing="6">
+                    <TextBlock Text="Mot de passe"
+                               FontSize="13"
+                               FontWeight="SemiBold"
+                               Foreground="#4a5568"/>
+                    <TextBox Watermark="••••••••"
+                             PasswordChar="●"
+                             Text="{Binding Password}"
+                             Padding="12,10"
+                             FontSize="14"
+                             CornerRadius="8"
+                             BorderBrush="#cbd5e0"
+                             BorderThickness="1.5"/>
+                </StackPanel>
+
+                <!-- Message d'erreur -->
+                <Border Background="#fff5f5"
+                        BorderBrush="#fc8181"
+                        BorderThickness="1"
+                        CornerRadius="8"
+                        Padding="12,8"
+                        IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                    <TextBlock Text="{Binding ErrorMessage}"
+                               Foreground="#c53030"
+                               FontSize="12"
+                               TextWrapping="Wrap"
+                               HorizontalAlignment="Center"/>
+                </Border>
+
+                <!-- Boutons -->
+                <Grid ColumnDefinitions="*,*" Margin="0,10,0,0">
+                    <Button Content="Se connecter"
+                            Grid.Column="0"
+                            Padding="0,12"
+                            Command="{Binding LoginCommand}"
+                            FontSize="14"
+                            FontWeight="SemiBold"
+                            HorizontalAlignment="Stretch"
+                            Background="#48bb78"
+                            Foreground="White"
+                            CornerRadius="10"/>
+                    <Button Content="Annuler"
+                            Grid.Column="1"
+                            Padding="0,12"
+                            Command="{Binding CancelCommand}"
+                            FontSize="14"
+                            FontWeight="SemiBold"
+                            HorizontalAlignment="Stretch"
+                            Background="#e2e8f0"
+                            Foreground="#4a5568"
+                            CornerRadius="10"/>
+                </Grid>
+
+            </StackPanel>
+        </Border>
+    </Panel>
+</Window>
