@@ -43,30 +43,12 @@ services:
       interval: 10s
       timeout: 5s
       retries: 3
-  prisma-studio:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-      target: builder
-    container_name: fripouilles-prisma-studio
-    env_file:
-      - backend/.env.docker
-    ports:
-      - '51212:51212'
-    depends_on:
-      db:
-        condition: service_healthy
-    networks:
-      - fripouilles-network
-    entrypoint:
-      - sh
-      - -c
-      - 'npm install -g npm@latest && npx prisma studio --port 51212 --browser none --config=./prisma.config.ts'
   web:
     build:
       context: ./web
       dockerfile: Dockerfile
       target: runner
+      network: host
       args:
         NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://172.29.102.22:3000/api}
     container_name: fripouilles-web
