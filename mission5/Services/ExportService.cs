@@ -29,17 +29,18 @@ namespace mission5.Services
                 csv.AppendLine($"Date: {atelier.Date:dd/MM/yyyy}");
                 csv.AppendLine($"Horaire: {atelier.Horaire}");
                 csv.AppendLine($"Lieu: {atelier.Lieu}");
+                csv.AppendLine($"Prix: {atelier.PrixDisplay}");
                 csv.AppendLine($"Nombre d'inscrits: {inscriptions.Count}/{atelier.NombrePlaces}");
                 csv.AppendLine();
 
                 // Colonnes
-                csv.AppendLine("N°,Nom complet,Présent");
+                csv.AppendLine("N°,Nom complet,Statut paiement,Présent");
 
                 // Données
                 int numero = 1;
                 foreach (var inscription in inscriptions)
                 {
-                    csv.AppendLine($"{numero},{inscription.NomComplet},{(inscription.Present ? "Oui" : "Non")}");
+                    csv.AppendLine($"{numero},{inscription.NomComplet},{inscription.StatutPaiementDisplay},{(inscription.Present ? "Oui" : "Non")}");
                     numero++;
                 }
 
@@ -73,6 +74,8 @@ namespace mission5.Services
             html.AppendLine("        th { background: #4299e1; color: white; padding: 12px; text-align: left; }");
             html.AppendLine("        td { padding: 10px; border-bottom: 1px solid #e2e8f0; }");
             html.AppendLine("        tr:nth-child(even) { background: #f7fafc; }");
+            html.AppendLine("        .statut-paye { background-color: #c6f6d5; color: #22543d; font-weight: bold; }");
+            html.AppendLine("        .statut-a-payer { background-color: #fed7d7; color: #742a2a; font-weight: bold; }");
             html.AppendLine("        .footer { margin-top: 30px; text-align: center; color: #718096; font-size: 12px; }");
             html.AppendLine("        @media print { .no-print { display: none; } }");
             html.AppendLine("    </style>");
@@ -86,6 +89,7 @@ namespace mission5.Services
             html.AppendLine($"        <p><strong>Horaire :</strong> {atelier.Horaire}</p>");
             html.AppendLine($"        <p><strong>Lieu :</strong> {atelier.Lieu}</p>");
             html.AppendLine($"        <p><strong>Type de public :</strong> {atelier.TypePublicDisplay}</p>");
+            html.AppendLine($"        <p><strong>Prix :</strong> {atelier.PrixDisplay}</p>");
             html.AppendLine($"        <p><strong>Nombre d'inscrits :</strong> {inscriptions.Count} / {atelier.NombrePlaces}</p>");
             html.AppendLine("    </div>");
 
@@ -94,6 +98,7 @@ namespace mission5.Services
             html.AppendLine("            <tr>");
             html.AppendLine("                <th style='width: 50px;'>N°</th>");
             html.AppendLine("                <th>Nom complet</th>");
+            html.AppendLine("                <th style='width: 120px;'>Statut paiement</th>");
             html.AppendLine("                <th style='width: 100px;'>Présence</th>");
             html.AppendLine("                <th style='width: 150px;'>Signature</th>");
             html.AppendLine("            </tr>");
@@ -103,9 +108,11 @@ namespace mission5.Services
             int numero = 1;
             foreach (var inscription in inscriptions)
             {
+                var statutClass = inscription.StatutPaiement == Models.StatutPaiement.REGLE ? "statut-paye" : "statut-a-payer";
                 html.AppendLine("            <tr>");
                 html.AppendLine($"                <td>{numero}</td>");
                 html.AppendLine($"                <td>{inscription.NomComplet}</td>");
+                html.AppendLine($"                <td class='{statutClass}'>{inscription.StatutPaiementDisplay}</td>");
                 html.AppendLine($"                <td>{(inscription.Present ? "✓" : "☐")}</td>");
                 html.AppendLine("                <td></td>");
                 html.AppendLine("            </tr>");

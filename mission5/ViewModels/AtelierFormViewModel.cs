@@ -20,6 +20,7 @@ namespace mission5.ViewModels
         private TimeSpan _heureFin = new TimeSpan(11, 0, 0);
         private DateTime _dateLimiteInscription = DateTime.Today.AddDays(5);
         private int _nombrePlaces = 15;
+        private decimal _prix = 0;
         private string _lieu = string.Empty;
         private TypePublicAtelier _typePublic = TypePublicAtelier.ENFANT;
         private int? _ageMinMois;
@@ -65,6 +66,12 @@ namespace mission5.ViewModels
         {
             get => _description;
             set => this.RaiseAndSetIfChanged(ref _description, value);
+        }
+
+        public Decimal Prix
+        {
+            get => _prix;
+            set => this.RaiseAndSetIfChanged(ref _prix, value);
         }
 
         public DateTime Date
@@ -146,6 +153,7 @@ namespace mission5.ViewModels
                 DateLimiteInscription = atelier.DateLimiteInscription;
                 NombrePlaces = atelier.NombrePlaces;
                 Lieu = atelier.Lieu;
+                Prix = atelier.Prix;
                 TypePublic = atelier.TypePublic;
                 AgeMinMois = atelier.AgeMinMois;
                 AgeMaxMois = atelier.AgeMaxMois;

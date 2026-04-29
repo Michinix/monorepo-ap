@@ -74,4 +74,6 @@ export class CreateAtelierDto {
   @IsInt()
   @IsPositive()
   readonly animateurId?: number;
+
+  readonly prix?: number;
 }

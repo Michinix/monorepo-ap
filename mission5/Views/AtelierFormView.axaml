@@ -153,6 +153,23 @@
                                            BorderBrush="#cbd5e0"
                                            BorderThickness="1.5"/>
                         </StackPanel>
+                        
+                        <!-- Prix -->
+                            <StackPanel Grid.Column="0" Spacing="6">
+                                <TextBlock Text="Prix"
+                                           FontSize="13"
+                                           FontWeight="SemiBold"
+                                           Foreground="#4a5568"/>
+                                <NumericUpDown Value="{Binding Prix}"
+                                               Minimum="1"
+                                               Maximum="100"
+                                               Increment="1"
+                                               Padding="12,10"
+                                               FontSize="14"
+                                               CornerRadius="8"
+                                               BorderBrush="#cbd5e0"
+                                               BorderThickness="1.5"/>
+                            </StackPanel>
 
                         <StackPanel Grid.Column="2" Spacing="6">
                             <TextBlock Text="Type de public *"

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -15,20 +16,30 @@ namespace mission5.Services
         {
             try
             {
+                Debug.WriteLine($"LoginAsync - Tentative de connexion avec {email}");
                 var result = await ApiClient.Instance.PostAsync<LoginResponse>("/api/auth/login", new { email, password });
 
+                Debug.WriteLine($"LoginAsync - Réponse reçue, Token: {result?.Token}");
+
                 if (result?.Token == null)
+                {
+                    Debug.WriteLine("LoginAsync - Token null");
                     return false;
+                }
 
                 ApiClient.Instance.SetToken(result.Token);
+                Debug.WriteLine("LoginAsync - Token défini avec succès");
                 return true;
             }
-            catch (HttpRequestException)
+            catch (HttpRequestException ex)
             {
+                Debug.WriteLine($"LoginAsync - HttpRequestException: {ex.Message}");
                 return false;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Debug.WriteLine($"LoginAsync - Exception: {ex.Message}");
+                Debug.WriteLine($"LoginAsync - StackTrace: {ex.StackTrace}");
                 return false;
             }
         }

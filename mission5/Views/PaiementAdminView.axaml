@@ -1,0 +1,377 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:mission5.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="950" d:DesignHeight="700"
+             x:Class="mission5.Views.PaiementAdminView"
+             x:DataType="vm:PaiementAdminViewModel">
+
+    <Design.DataContext>
+        <vm:PaiementAdminViewModel/>
+    </Design.DataContext>
+
+    <ScrollViewer>
+        <StackPanel Spacing="20">
+
+            <!-- En-tête avec bouton retour -->
+            <Grid ColumnDefinitions="Auto,*">
+                <Button Grid.Column="0"
+                        Command="{Binding BackCommand}"
+                        Background="Transparent"
+                        Foreground="#4a5568"
+                        Padding="8"
+                        BorderThickness="0"
+                        Cursor="Hand"
+                        VerticalAlignment="Center"
+                        Margin="0,0,12,0">
+                    <TextBlock Text="← Retour" FontSize="14" FontWeight="SemiBold"/>
+                </Button>
+
+                <StackPanel Grid.Column="1" Spacing="4">
+                    <TextBlock Text="Gestion des Paiements"
+                               FontSize="28"
+                               FontWeight="Bold"
+                               Foreground="#2d3748"/>
+                    <TextBlock Text="Enregistrer les paiements en physique des ateliers"
+                               FontSize="14"
+                               Foreground="#718096"/>
+                </StackPanel>
+            </Grid>
+
+            <!-- Barre de recherche et refresh -->
+            <Border Background="White"
+                    CornerRadius="10"
+                    Padding="16"
+                    BoxShadow="0 1 3 0 #1a000000">
+                <Grid ColumnDefinitions="*,Auto">
+                    <TextBox Grid.Column="0"
+                             Text="{Binding FilterText}"
+                             Watermark="🔍  Rechercher un atelier..."
+                             Padding="12,8"
+                             FontSize="14"
+                             CornerRadius="8"
+                             BorderBrush="#e2e8f0"
+                             BorderThickness="1"
+                             MaxWidth="400"
+                             HorizontalAlignment="Left"/>
+
+                    <Button Grid.Column="1"
+                            Command="{Binding RefreshCommand}"
+                            Background="#edf2f7"
+                            Foreground="#4a5568"
+                            Padding="12,8"
+                            CornerRadius="8"
+                            BorderThickness="0"
+                            Cursor="Hand">
+                        <TextBlock Text="🔄 Actualiser" FontSize="14"/>
+                    </Button>
+                </Grid>
+            </Border>
+
+            <!-- Liste des ateliers -->
+            <Border Background="White"
+                    CornerRadius="10"
+                    Padding="0"
+                    BoxShadow="0 1 3 0 #1a000000"
+                    IsVisible="{Binding !IsLoading}">
+                <StackPanel>
+                    <!-- En-tête -->
+                    <Border Background="#f7fafc" Padding="20,16">
+                        <Grid ColumnDefinitions="*,120,120">
+                            <TextBlock Grid.Column="0"
+                                       Text="Atelier"
+                                       FontSize="12"
+                                       FontWeight="Bold"
+                                       Foreground="#718096"/>
+                            <TextBlock Grid.Column="1"
+                                       Text="Prix"
+                                       FontSize="12"
+                                       FontWeight="Bold"
+                                       Foreground="#718096"
+                                       HorizontalAlignment="Center"/>
+                            <TextBlock Grid.Column="2"
+                                       Text="Inscrits"
+                                       FontSize="12"
+                                       FontWeight="Bold"
+                                       Foreground="#718096"
+                                       HorizontalAlignment="Center"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Lignes -->
+                    <ItemsControl ItemsSource="{Binding Ateliers}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Button Command="{Binding $parent[ItemsControl].((vm:PaiementAdminViewModel)DataContext).SelectAtelierCommand}"
+                                        CommandParameter="{Binding}"
+                                        Background="Transparent"
+                                        BorderThickness="0"
+                                        Padding="0"
+                                        HorizontalAlignment="Stretch"
+                                        HorizontalContentAlignment="Stretch">
+                                    <Border BorderBrush="#e2e8f0"
+                                            BorderThickness="0,1,0,0"
+                                            Padding="20,16"
+                                            Cursor="Hand">
+                                        <Grid ColumnDefinitions="*,120,120">
+                                        <StackPanel Grid.Column="0" Spacing="4">
+                                            <TextBlock Text="{Binding Nom}"
+                                                       FontSize="15"
+                                                       FontWeight="SemiBold"
+                                                       Foreground="#2d3748"/>
+                                            <StackPanel Orientation="Horizontal" Spacing="12">
+                                                <StackPanel Orientation="Horizontal" Spacing="4">
+                                                    <TextBlock Text="📅" FontSize="12"/>
+                                                    <TextBlock Text="{Binding Date, StringFormat='{}{0:dd/MM/yyyy}'}"
+                                                               FontSize="12"
+                                                               Foreground="#718096"/>
+                                                </StackPanel>
+                                                <StackPanel Orientation="Horizontal" Spacing="4">
+                                                    <TextBlock Text="🕐" FontSize="12"/>
+                                                    <TextBlock Text="{Binding Horaire}"
+                                                               FontSize="12"
+                                                               Foreground="#718096"/>
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </StackPanel>
+
+                                        <TextBlock Grid.Column="1"
+                                                   Text="{Binding PrixDisplay}"
+                                                   FontSize="14"
+                                                   FontWeight="SemiBold"
+                                                   Foreground="#2d3748"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"/>
+
+                                        <TextBlock Grid.Column="2"
+                                                   Text="{Binding Inscriptions.Count, StringFormat='{}{0} pers.'}"
+                                                   FontSize="14"
+                                                   FontWeight="SemiBold"
+                                                   Foreground="#2d3748"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"/>
+                                        </Grid>
+                                    </Border>
+                                </Button>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+
+            <!-- Vue détails d'un atelier sélectionné -->
+            <Border Background="White"
+                    CornerRadius="10"
+                    Padding="20"
+                    BoxShadow="0 1 3 0 #1a000000"
+                    IsVisible="{Binding SelectedAtelier, Converter={x:Static ObjectConverters.IsNotNull}}">
+
+                <StackPanel Spacing="16">
+                    <!-- Titre de l'atelier sélectionné -->
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="{Binding SelectedAtelier.Nom}"
+                                   FontSize="20"
+                                   FontWeight="Bold"
+                                   Foreground="#2d3748"/>
+                        <TextBlock Text="{Binding SelectedAtelier.Lieu}"
+                                   FontSize="13"
+                                   Foreground="#718096"/>
+                    </StackPanel>
+
+                    <!-- Stats -->
+                    <Grid ColumnDefinitions="*,*,*">
+                        <Border Grid.Column="0"
+                                Background="#c6f6d5"
+                                CornerRadius="8"
+                                Padding="16">
+                            <StackPanel Spacing="4" HorizontalAlignment="Center">
+                                <TextBlock Text="{Binding NombrePayes}"
+                                           FontSize="24"
+                                           FontWeight="Bold"
+                                           Foreground="#22543d"
+                                           HorizontalAlignment="Center"/>
+                                <TextBlock Text="Payés"
+                                           FontSize="12"
+                                           Foreground="#22543d"
+                                           HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Grid.Column="1"
+                                Background="#fed7d7"
+                                CornerRadius="8"
+                                Padding="16"
+                                Margin="8,0">
+                            <StackPanel Spacing="4" HorizontalAlignment="Center">
+                                <TextBlock Text="{Binding NombreNonPayes}"
+                                           FontSize="24"
+                                           FontWeight="Bold"
+                                           Foreground="#742a2a"
+                                           HorizontalAlignment="Center"/>
+                                <TextBlock Text="À payer"
+                                           FontSize="12"
+                                           Foreground="#742a2a"
+                                           HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Grid.Column="2"
+                                Background="#bee3f8"
+                                CornerRadius="8"
+                                Padding="16">
+                            <StackPanel Spacing="4" HorizontalAlignment="Center">
+                                <TextBlock Text="{Binding SelectedAtelier.PrixDisplay}"
+                                           FontSize="18"
+                                           FontWeight="Bold"
+                                           Foreground="#2c5282"
+                                           HorizontalAlignment="Center"/>
+                                <TextBlock Text="par personne"
+                                           FontSize="12"
+                                           Foreground="#2c5282"
+                                           HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+
+                    <!-- Liste des inscriptions -->
+                    <StackPanel Spacing="12">
+                        <TextBlock Text="Inscrits"
+                                   FontSize="16"
+                                   FontWeight="Bold"
+                                   Foreground="#2d3748"/>
+
+                        <!-- Filtre -->
+                        <TextBox Text="{Binding FilterText}"
+                                 Watermark="Filtrer les noms..."
+                                 Padding="12,8"
+                                 FontSize="13"
+                                 CornerRadius="8"
+                                 BorderBrush="#e2e8f0"
+                                 BorderThickness="1"/>
+
+                        <!-- Tableau des inscriptions -->
+                        <Border Background="#f7fafc"
+                                CornerRadius="8"
+                                Padding="0">
+                            <Border Background="#edf2f7" Padding="16">
+                                <Grid ColumnDefinitions="*,120,120">
+                                    <TextBlock Grid.Column="0"
+                                               Text="Nom"
+                                               FontSize="12"
+                                               FontWeight="Bold"
+                                               Foreground="#718096"/>
+                                    <TextBlock Grid.Column="1"
+                                               Text="Statut"
+                                               FontSize="12"
+                                               FontWeight="Bold"
+                                               Foreground="#718096"
+                                               HorizontalAlignment="Center"/>
+                                    <TextBlock Grid.Column="2"
+                                               Text="Action"
+                                               FontSize="12"
+                                               FontWeight="Bold"
+                                               Foreground="#718096"
+                                               HorizontalAlignment="Center"/>
+                                </Grid>
+                            </Border>
+                        </Border>
+
+                        <ItemsControl ItemsSource="{Binding FilteredInscriptions}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Background="White"
+                                            BorderBrush="#e2e8f0"
+                                            BorderThickness="0,0,0,1"
+                                            Padding="16">
+                                        <Grid ColumnDefinitions="*,120,120">
+
+                                            <TextBlock Grid.Column="0"
+                                                       Text="{Binding NomComplet}"
+                                                       FontSize="14"
+                                                       Foreground="#2d3748"
+                                                       VerticalAlignment="Center"/>
+
+                                        <StackPanel Grid.Column="1" HorizontalAlignment="Center">
+                                            <Border Background="#d1fae5"
+                                                    CornerRadius="6"
+                                                    Padding="8,4"
+                                                    IsVisible="{Binding IsPaye}">
+                                                <TextBlock Text="Payé"
+                                                           FontSize="12"
+                                                           FontWeight="SemiBold"
+                                                           Foreground="#065f46"
+                                                           HorizontalAlignment="Center"/>
+                                            </Border>
+                                            <Border Background="#fed7d7"
+                                                    CornerRadius="6"
+                                                    Padding="8,4"
+                                                    IsVisible="{Binding IsARegler}">
+                                                <TextBlock Text="À payer"
+                                                           FontSize="12"
+                                                           FontWeight="SemiBold"
+                                                           Foreground="#742a2a"
+                                                           HorizontalAlignment="Center"/>
+                                            </Border>
+                                        </StackPanel>
+
+                                            <Button Grid.Column="2"
+                                                    Command="{Binding $parent[ItemsControl].((vm:PaiementAdminViewModel)DataContext).TogglePaiementCommand}"
+                                                    CommandParameter="{Binding}"
+                                                    Background="#48bb78"
+                                                    Foreground="White"
+                                                    Padding="8,6"
+                                                    CornerRadius="6"
+                                                    BorderThickness="0"
+                                                    Cursor="Hand"
+                                                    HorizontalAlignment="Center"
+                                                    IsVisible="{Binding IsARegler}">
+                                                <TextBlock Text="Marquer payé"
+                                                           FontSize="11"
+                                                           FontWeight="SemiBold"/>
+                                            </Button>
+
+                                            <Button Grid.Column="2"
+                                                    Command="{Binding $parent[ItemsControl].((vm:PaiementAdminViewModel)DataContext).TogglePaiementCommand}"
+                                                    CommandParameter="{Binding}"
+                                                    Background="#f56565"
+                                                    Foreground="White"
+                                                    Padding="8,6"
+                                                    CornerRadius="6"
+                                                    BorderThickness="0"
+                                                    Cursor="Hand"
+                                                    HorizontalAlignment="Center"
+                                                    IsVisible="{Binding IsPaye}">
+                                                <TextBlock Text="Marquer impayé"
+                                                           FontSize="11"
+                                                           FontWeight="SemiBold"/>
+                                            </Button>
+
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- Message de chargement -->
+            <Border Background="White"
+                    CornerRadius="10"
+                    Padding="40"
+                    IsVisible="{Binding IsLoading}"
+                    BoxShadow="0 1 3 0 #1a000000">
+                <StackPanel Spacing="12" HorizontalAlignment="Center">
+                    <TextBlock Text="⏳" FontSize="32" HorizontalAlignment="Center"/>
+                    <TextBlock Text="Chargement..."
+                               FontSize="14"
+                               Foreground="#718096"
+                               HorizontalAlignment="Center"/>
+                </StackPanel>
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
+
+</UserControl>

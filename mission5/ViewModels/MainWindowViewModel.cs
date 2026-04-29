@@ -11,6 +11,7 @@ namespace mission5.ViewModels
         public MainWindowViewModel()
         {
             ShowAteliersCommand = ReactiveCommand.Create(ShowAteliers);
+            ShowPaiementAdminCommand = ReactiveCommand.Create(ShowPaiementAdmin);
             LogoutCommand = ReactiveCommand.Create(Logout);
 
             // Par défaut, afficher la liste des ateliers
@@ -18,6 +19,7 @@ namespace mission5.ViewModels
         }
 
         public ReactiveCommand<Unit, Unit> ShowAteliersCommand { get; }
+        public ReactiveCommand<Unit, Unit> ShowPaiementAdminCommand { get; }
         public ReactiveCommand<Unit, Unit> LogoutCommand { get; }
 
         public ViewModelBase CurrentPage
@@ -39,6 +41,11 @@ namespace mission5.ViewModels
         public void ShowInscriptions(int atelierId)
         {
             CurrentPage = new InscriptionsViewModel(this, atelierId);
+        }
+
+        public void ShowPaiementAdmin()
+        {
+            CurrentPage = new PaiementAdminViewModel(this);
         }
 
         private void Logout()

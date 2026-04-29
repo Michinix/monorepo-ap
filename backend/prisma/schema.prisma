@@ -229,6 +229,7 @@ model Atelier {
   updatedAt             DateTime             @updatedAt
   animateur             AssistantProfil?     @relation("Animateur", fields: [animateurId], references: [id])
   inscriptions          InscriptionAtelier[]
+  prix                  Decimal?            @db.Decimal(10, 2)
 
   @@index([date])
   @@map("ateliers")
@@ -245,6 +246,7 @@ model InscriptionAtelier {
   atelier     Atelier          @relation(fields: [atelierId], references: [id])
   enfant      Enfant?          @relation(fields: [enfantId], references: [id])
   parent      ParentProfil?    @relation(fields: [parentId], references: [id])
+  statutPaiement StatutPaiement   @default(A_REGLER)
 
   @@unique([atelierId, enfantId])
   @@unique([atelierId, assistantId])
@@ -354,6 +356,11 @@ model ParametreLegal {
 
   @@index([nom, dateMiseEnVigueur])
   @@map("parametres_legaux")
+}
+
+enum StatutPaiement {
+  REGLE
+  A_REGLER
 }
 
 enum Role {

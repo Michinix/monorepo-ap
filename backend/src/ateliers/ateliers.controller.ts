@@ -19,6 +19,7 @@ import { AteliersService } from './ateliers.service';
 import { CreateAtelierDto } from './dto/create-atelier.dto';
 import { CreateInscriptionAtelierDto } from './dto/create-inscription-atelier.dto';
 import { UpdateAtelierDto } from './dto/update-atelier.dto';
+import { UpdatePaiementInscriptionDto } from './dto/update-paiement-inscription.dto';
 
 @ApiTags('Ateliers')
 @UseGuards(CombinedAuthGuard)
@@ -145,5 +146,27 @@ export class AteliersController {
       present,
     );
     return { message: 'Présence mise à jour', data };
+  }
+
+  @Patch('inscriptions/:inscriptionId/paiement')
+  @Roles(Role.PARENT, Role.ASSISTANT, Role.ADMIN)
+  @ApiOperation({
+    summary: 'Mettre à jour le statut de paiement',
+    description:
+      'Parents/Assistants peuvent payer leurs propres inscriptions. Admin peut gérer les paiements de tous les utilisateurs.',
+  })
+  async updateStatutPaiement(
+    @Param('inscriptionId', ParseIntPipe) inscriptionId: number,
+    @Body() dto: UpdatePaiementInscriptionDto,
+    @User('userId') userId: number,
+    @User('role') userRole: string,
+  ) {
+    const data = await this.ateliersService.updateStatutPaiement(
+      inscriptionId,
+      dto.statutPaiement,
+      userId,
+      userRole,
+    );
+    return { message: 'Statut de paiement mise à jour', data };
   }
 }

@@ -27,6 +27,7 @@ namespace mission5.Models
         public int? AgeMinMois { get; set; }
         public int? AgeMaxMois { get; set; }
         public int? AnimateurId { get; set; }
+        public decimal Prix { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
 
@@ -46,5 +47,7 @@ namespace mission5.Models
             TypePublicAtelier.MIXTE => "Mixte",
             _ => TypePublic.ToString()
         };
+
+        public string PrixDisplay => Prix == null || Prix == 0 ? "Gratuit" : $"{Prix:F2}€";
     }
 }

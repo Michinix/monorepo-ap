@@ -16,6 +16,7 @@ data class Atelier(
     val typePublic: TypePublicAtelier,
     val ageMinMois: Int? = null,
     val ageMaxMois: Int? = null,
+    val prix: Int?
     val animateurId: Int? = null,
     val animateur: AnimateurInfo? = null,
     val inscriptions: List<InscriptionAtelier> = emptyList(),

@@ -58,6 +58,57 @@ export class AteliersService {
     };
   }
 
+  /** Mettre à jour le statut de paiement d'une inscription */
+  async updateStatutPaiement(
+    inscriptionId: number,
+    statutPaiement: any,
+    userId: number,
+    userRole: string,
+  ) {
+    const inscription = await this.prisma.inscriptionAtelier.findUnique({
+      where: { id: inscriptionId },
+    });
+    if (!inscription) throw new NotFoundException('Inscription non trouvée');
+
+    // Si ce n'est pas un admin, vérifier que c'est sa propre inscription
+    if (userRole !== 'ADMIN') {
+      if (userRole === 'PARENT') {
+        const parentId = await this.getParentProfilId(userId);
+        if (inscription.parentId !== parentId) {
+          throw new ForbiddenException(
+            'Vous ne pouvez payer que pour vos propres inscriptions',
+          );
+        }
+      } else if (userRole === 'ASSISTANT') {
+        const assistantId = await this.getAssistantProfilId(userId);
+        if (inscription.assistantId !== assistantId) {
+          throw new ForbiddenException(
+            'Vous ne pouvez payer que pour vos propres inscriptions',
+          );
+        }
+      }
+    }
+
+    return this.prisma.inscriptionAtelier.update({
+      where: { id: inscriptionId },
+      data: { statutPaiement },
+      include: {
+        atelier: true,
+        enfant: { select: { id: true, prenom: true, nom: true } },
+        parent: {
+          include: {
+            utilisateur: { select: { id: true, prenom: true, nom: true } },
+          },
+        },
+        assistant: {
+          include: {
+            utilisateur: { select: { id: true, prenom: true, nom: true } },
+          },
+        },
+      },
+    });
+  }
+
   async create(dto: CreateAtelierDto) {
     return this.prisma.atelier.create({
       data: {
@@ -196,6 +247,11 @@ export class AteliersService {
       include: {
         atelier: true,
         enfant: { select: { id: true, prenom: true, nom: true } },
+        parent: {
+          include: {
+            utilisateur: { select: { id: true, prenom: true, nom: true } },
+          },
+        },
       },
     });
   }
@@ -231,7 +287,14 @@ export class AteliersService {
 
     return this.prisma.inscriptionAtelier.create({
       data: { atelierId: dto.atelierId, assistantId },
-      include: { atelier: true },
+      include: {
+        atelier: true,
+        assistant: {
+          include: {
+            utilisateur: { select: { id: true, prenom: true, nom: true } },
+          },
+        },
+      },
     });
   }
 
@@ -291,6 +354,11 @@ export class AteliersService {
       include: {
         atelier: true,
         enfant: { select: { id: true, prenom: true, nom: true } },
+        parent: {
+          include: {
+            utilisateur: { select: { id: true, prenom: true, nom: true } },
+          },
+        },
       },
       orderBy: { atelier: { date: 'asc' } },
     });
@@ -301,7 +369,14 @@ export class AteliersService {
     const assistantId = await this.getAssistantProfilId(userId);
     return this.prisma.inscriptionAtelier.findMany({
       where: { assistantId },
-      include: { atelier: true },
+      include: {
+        atelier: true,
+        assistant: {
+          include: {
+            utilisateur: { select: { id: true, prenom: true, nom: true } },
+          },
+        },
+      },
       orderBy: { atelier: { date: 'asc' } },
     });
   }
@@ -316,6 +391,20 @@ export class AteliersService {
     return this.prisma.inscriptionAtelier.update({
       where: { id: inscriptionId },
       data: { present },
+      include: {
+        atelier: true,
+        enfant: { select: { id: true, prenom: true, nom: true } },
+        parent: {
+          include: {
+            utilisateur: { select: { id: true, prenom: true, nom: true } },
+          },
+        },
+        assistant: {
+          include: {
+            utilisateur: { select: { id: true, prenom: true, nom: true } },
+          },
+        },
+      },
     });
   }
 

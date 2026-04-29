@@ -17,12 +17,15 @@ namespace mission5.Services
         {
             try
             {
+                Debug.WriteLine("GetAteliersAsync - Début de l'appel API");
                 var result = await ApiClient.Instance.GetAsync<List<Atelier>>("/api/ateliers");
+                Debug.WriteLine($"GetAteliersAsync - Résultat: {result?.Count ?? 0} ateliers");
                 return result ?? new List<Atelier>();
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"Erreur GetAteliersAsync: {ex.Message}");
+                Debug.WriteLine($"Erreur GetAteliersAsync stacktrace: {ex.StackTrace}");
                 return new List<Atelier>();
             }
         }
@@ -95,6 +98,21 @@ namespace mission5.Services
                 return new List<InscriptionAtelier>();
             }
         }
+
+        public async Task<bool> UpdatePaiementAsync(int inscriptionId, StatutPaiement statutPaiement)
+        {
+            try
+            {
+                var payload = new { statutPaiement };
+                await ApiClient.Instance.PatchAsync($"/api/ateliers/inscriptions/{inscriptionId}/paiement", payload);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Erreur UpdatePaiementAsync ({inscriptionId}): {ex.Message}");
+                return false;
+            }
+        }
     }
 
     public class AtelierCreateDto
@@ -111,6 +129,7 @@ namespace mission5.Services
         public int? AgeMinMois { get; set; }
         public int? AgeMaxMois { get; set; }
         public int? AnimateurId { get; set; }
+        public decimal Prix { get; set; }
     }
 
     public class AtelierUpdateDto : AtelierCreateDto

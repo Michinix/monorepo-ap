@@ -2,6 +2,12 @@ using System.Text.Json.Serialization;
 
 namespace mission5.Models
 {
+    public enum StatutPaiement
+    {
+        REGLE,
+        A_REGLER
+    }
+
     public class InscriptionAtelier
     {
         public int Id { get; set; }
@@ -10,6 +16,7 @@ namespace mission5.Models
         public int? EnfantId { get; set; }
         public int? AssistantId { get; set; }
         public bool Present { get; set; }
+        public StatutPaiement StatutPaiement { get; set; } = StatutPaiement.A_REGLER;
 
         // Relations
         [JsonIgnore]
@@ -32,5 +39,15 @@ namespace mission5.Models
                 return "N/A";
             }
         }
+
+        public string StatutPaiementDisplay => StatutPaiement switch
+        {
+            StatutPaiement.REGLE => "Payé",
+            StatutPaiement.A_REGLER => "À payer",
+            _ => StatutPaiement.ToString()
+        };
+
+        public bool IsPaye => StatutPaiement == StatutPaiement.REGLE;
+        public bool IsARegler => StatutPaiement == StatutPaiement.A_REGLER;
     }
 }

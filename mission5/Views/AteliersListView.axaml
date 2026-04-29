@@ -160,6 +160,14 @@
                                                        Foreground="#4a5568"/>
                                         </StackPanel>
 
+                                        <StackPanel Orientation="Horizontal" Spacing="6">
+                                            <TextBlock Text="💶" FontSize="14"/>
+                                            <TextBlock Text="{Binding PrixDisplay}"
+                                                       FontSize="13"
+                                                       Foreground="#4a5568"
+                                                       FontWeight="SemiBold"/>
+                                        </StackPanel>
+
                                         <Border Background="#e6fffa"
                                                 CornerRadius="4"
                                                 Padding="8,4">

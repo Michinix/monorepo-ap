@@ -135,5 +135,20 @@ namespace mission5.Services
             var response = await _httpClient.DeleteAsync(endpoint);
             response.EnsureSuccessStatusCode();
         }
+
+        public async Task PatchAsync(string endpoint, object data)
+        {
+            var serializeOptions = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            };
+            serializeOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+
+            var body = JsonSerializer.Serialize(data, serializeOptions);
+            var content = new StringContent(body, Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PatchAsync(endpoint, content);
+            response.EnsureSuccessStatusCode();
+        }
     }
 }

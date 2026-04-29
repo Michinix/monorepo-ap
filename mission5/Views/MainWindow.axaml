@@ -75,6 +75,28 @@
                     </Button>
                 </Border>
 
+                <!-- Gestion des paiements -->
+                <Border Background="#f7fafc"
+                        CornerRadius="8"
+                        Margin="12,0">
+                    <Button Command="{Binding ShowPaiementAdminCommand}"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            Padding="16,12"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Left"
+                            Cursor="Hand">
+                        <StackPanel Orientation="Horizontal" Spacing="12">
+                            <TextBlock Text="💳" FontSize="18"/>
+                            <TextBlock Text="Paiements"
+                                       FontSize="14"
+                                       FontWeight="SemiBold"
+                                       Foreground="#2d3748"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                </Border>
+
                 <!-- Spacer -->
                 <Border Height="1"/>
 
